@@ -1,0 +1,283 @@
+﻿
+@{
+    ViewBag.Title = "JqueryPage";
+}
+@*<input id="myrow" type="hidden" value="1"/>*@
+<br />
+<br />
+<center>
+    <h2>Jquery</h2>
+    <h3>Technical Task</h3>
+</center>
+<br />
+<input type="hidden" id="mycounter" value="1"/>
+<div style="padding:40px" class="row">
+    <span>Invoice No &nbsp;<input type="text" id="myinvoicenumber" /></span>
+    <span>&nbsp; &nbsp; &nbsp;</span>
+    <span>invoice Date  &nbsp;<input type="text" id="mydate" readonly/></span>
+    <br />
+    <br />
+    <span>store &nbsp; @Html.DropDownList("GetMyList", null, htmlAttributes: new { @id = "mystore" })</span>
+</div>
+<div>
+    <table>
+        <tr>
+            <td>
+                <table border="1" id="mytbl">
+                    <tr>
+                        <th>SN</th>
+                        <th style="text-align:center">
+                            Item
+                        </th>
+                        <th style="text-align:center">
+                            Unit
+                        </th>
+                        <th style="text-align:center">
+                            Price
+                        </th>
+                        <th style="text-align:center">
+                            Qty
+                        </th>
+                        <th style="text-align:center">
+                            Total
+                        <th style="text-align:center">
+                            Discount
+                        </th>
+                        <th style="text-align:center">
+                            Net
+                        </th>
+                        <th>Operation</th>
+                    </tr>
+                    <tr class="myrow" id="myrow">
+                        <td>
+                            <p class="Mycounter">1</p>
+                        </td>
+                        <td>
+                            @Html.DropDownList("GetMyList", null, htmlAttributes: new {@class = "MyItem" })
+                        </td>
+                        <td>
+                            @Html.DropDownList("GetMyList", null, htmlAttributes: new { @class = "MyUnit" })
+                        </td>
+                        <td>
+                            <input type="text" class="MyFirst" value="0" style="text-align:center" />
+                        </td>
+                        <td>
+                            <input type="text" class="MySecond" value="0" style="text-align:center" />
+                        </td>
+                        <td>
+                            <input type="text" class="MyThird" value="0" style="text-align:center" disabled/>
+                        </td>
+                        <td>
+                            <input type="text" class="MyFourth" value="0" style="text-align:center" />
+                        </td>
+                        <td>
+                            <input type="text" class="MyFifth" value="0" style="text-align:center" />
+                        </td>
+                        <td style="text-align:center"><input type="button" value="Delete" id="deletebtn1"/></td>
+                    </tr>
+                </table>
+            </td>
+            @*<td>&nbsp;</td>
+            <td>
+                <button id="myaddbtn">Add</button>
+            </td>*@
+        </tr>
+    </table>
+</div>
+<div style="padding: 25px; margin: 35px auto; text-align: right; padding-right: 10em">
+    <span> Total <input type="text" id="Mytotal" style="text-align:center"/></span>
+    <br />
+    <span> Taxes <input type="text" id="MyTaxes" style="text-align:center"/></span>
+    <br />
+    <span> Net <input type="text" id="MyNet" style="text-align:center"/></span>
+</div>
+<div style="padding-left:30em">
+    @*<a href='@Url.Action("Index","Home")'><input type="button" value="Save" id="mysavebtn" /></a> &nbsp; | &nbsp; <button id="btndel">Delete</button>*@
+    <button id="myaddbtn">Add Row ++</button>
+    <span>&nbsp; | &nbsp; </span><button id="btndel">Delete Row --</button>
+    <span>&nbsp; | &nbsp; </span><input type="button" value="Save All Data" id="mysavebtn" />
+</div>
+<script>
+    $(document).ready(function () {
+
+        $("#mydate").datepicker({
+            dateFormat: 'yy-mm-dd',
+            changeYear: true,
+            changeMonth: true,
+            //maxDate: 0,
+            //showButtonPanel: true
+
+        });
+
+
+        $("#mysavebtn").on("click", function () {
+            var arr11 = document.getElementsByClassName("MyItem");
+            var MyItem = new Array();
+            for (var i = 0; i < arr11.length; i++) {
+                MyItem.push(parseInt(arr11[i].value));
+            }
+            var arr12 = document.getElementsByClassName("MyUnit");
+            var MyUnit = new Array();
+            for (var i = 0; i < arr12.length; i++) {
+                MyUnit.push(parseInt(arr12[i].value));
+            }
+
+            var arr1 = document.getElementsByClassName("MyFirst");
+            var MyFirst = new Array();
+            for (var i = 0; i < arr1.length; i++) {
+                MyFirst.push(parseInt(arr1[i].value) );
+            }
+            var arr2 = document.getElementsByClassName("MySecond");
+            var MySecond = new Array();
+            for (var i = 0; i < arr2.length; i++) {
+                MySecond.push(parseInt(arr2[i].value));
+            }
+            var arr3 = document.getElementsByClassName("MyThird");
+            var MyThird = new Array();
+            for (var i = 0; i < arr3.length; i++) {
+                MyThird.push(parseInt(arr3[i].value));
+            }
+            var arr4 = document.getElementsByClassName("MyFourth");
+            var MyFourth = new Array();
+            for (var i = 0; i < arr4.length; i++) {
+                MyFourth.push(parseInt(arr4[i].value));
+            }
+            var arr5 = document.getElementsByClassName("MyFifth");
+            var MyFifth = new Array();
+            for (var i = 0; i < arr5.length; i++) {
+                MyFifth.push(parseInt(arr5[i].value));
+            }
+             var url = '@Url.Action("SaveMYData", "Home", new { Area=""}, null)';
+            $.post(url, { invoicenumber: $("#myinvoicenumber").val(), date: $("#mydate").val(), store: $("#mystore").val(), MyItem: MyItem, MyUnit: MyUnit, MyFirst: MyFirst, MySecond: MySecond, MyThird: MyThird, MyFourth: MyFourth, MyFifth: MyFifth }, function (data, statuscode, xhr) {
+                console.log(data);
+                console.log(statuscode);
+                console.log(xhr);
+            });
+            alert("You are going to Reset the page, No database to be saved!");
+            window.location.href =  '@Url.Action("JqueryPage", "Home", new { Area=""}, null)'
+            //for (var i = 0; i <myarray.length; i++) {
+            //    console.log(myarray[i]);
+            //}
+            @*var MyFirst = new Array();
+            var arr1 = document.getElementsByClassName("MyFirst");
+            var arr2 = document.getElementsByClassName("MySecond");
+            var arr3 = document.getElementsByClassName("MyThird");
+            var arr4 = document.getElementsByClassName("MyFourth");
+            var arr5 = document.getElementsByClassName("MyFifth");
+            for (var i = 0; i < arr1.length; i++) {
+                MyFirst.push(parseInt(new Array(arr1[i].value, arr2[i].value, arr3[i].value, arr4[i].value, arr5[i].value)));
+            }
+            var url = '@Url.Action("SaveMYData", "Home", new { Area=""}, null)';
+            $.post(url, { MyFirst: MyFirst }, function (data, statuscode, xhr) {
+                console.log(data);
+                console.log(statuscode);
+                console.log(xhr);
+            });*@
+        });
+
+        $("#myaddbtn").on("click", function () {
+            $('#mycounter').val(parseInt ($('#mycounter').val()) + 1);
+            $("#myrow").clone(true).appendTo("#mytbl").end().find(".MyFirst").val("0")
+                .end().find(".MySecond").val("0")
+                .end().find(".MyThird").val("0")
+                .end().find(".MyFourth").val("0")
+                .end().find(".MyFifth").val("0")
+                .end().find(".Mycounter").text($('#mycounter').val());
+        });
+
+        $("#btndel").on("click", function () {
+            var x = $(".myrow").last().find(".MyFifth").val();
+            console.log(x);
+            document.getElementById("Mytotal").value -= parseInt(x);
+            $('#MyTaxes').trigger('keyup');
+            $(".myrow").last().remove();
+        });
+
+        $("#deletebtn1").on("click", function () {
+            var x = $(this).parent().parent().find(".MyFifth").val();
+            document.getElementById("Mytotal").value -= parseInt(x);
+            $('#MyTaxes').trigger('keyup');
+            $(this).parent().parent().remove();
+        });
+
+        $('.MyFirst').on('keyup', function () {
+            $(this).parent().next().next().children("input").val($(this).val() * $(this).parent().next().children("input").val()) ;
+            $('#MySecond').trigger('keyup');
+            $('#MyFourth').trigger('keyup');
+
+        });
+
+        $('.MySecond').on('keyup', function () {
+            $(this).parent().next().children("input").val($(this).val() * $(this).parent().prev().children("input").val()) ;
+            $('#MyFourth').trigger('keyup');
+        });
+
+        $('.MyFourth').on('keyup', function () {
+            $(this).parent().next().children("input").val($(this).parent().prev().children("input").val() - $(this).val()) ;
+
+            var arr = document.getElementsByClassName("MyFifth");
+            var total = 0 ;
+            for (var i = 0; i < arr.length; i++) {
+                total += parseInt( arr[i].value);
+            }
+            document.getElementById("Mytotal").value = total;
+            $('#MyTaxes').trigger('keyup');
+            $('#Mytotal').trigger('keyup');
+        });
+
+
+        $('#MyTaxes').on('keyup', function () {
+            document.getElementById("MyNet").value = document.getElementById("Mytotal").value - document.getElementById("MyTaxes").value;
+        });
+
+        $('#Mytotal').on('keyup', function () {
+            document.getElementById("MyNet").value = document.getElementById("Mytotal").value - document.getElementById("MyTaxes").value;
+            $('#MyTaxes').trigger('keyup');
+
+        });
+
+
+                //$("#mybtn").on("click", function () {
+        //    $("#myrow").clone(true).appendTo("#mytbl");
+        //});
+
+                //$('#MyFirst').on('keyup', function () {
+        //    //$("#Mythird").val() = $("#MyFirst").val() * $("#MySecond").val();
+        //    var myfirst = document.getElementById('MyFirst');
+        //    var mysecond = document.getElementById('MySecond');
+        //    var mythird = document.getElementById('MyThird');
+        //    mythird.value = myfirst.value * mysecond.value;
+        //    $('#MySecond').trigger('keyup');
+        //    $('#MyFourth').trigger('keyup');
+        //});
+
+        //$('#MySecond').on('keyup', function () {
+        //    var myfirst = document.getElementById('MyFirst');
+        //    var mysecond = document.getElementById('MySecond');
+        //    var mythird = document.getElementById('MyThird');
+        //    mythird.value = myfirst.value * mysecond.value;
+        //    $('#MyFourth').trigger('keyup');
+        //});
+
+        //$('#MyFourth').on('keyup', function () {
+        //    var MyThird = document.getElementById('MyThird');
+        //    var MyFourth = document.getElementById('MyFourth');
+        //    var MyFifth = document.getElementById('MyFifth');
+        //    MyFifth.value = MyThird.value - MyFourth.value;
+        //    $('#MyTaxes').trigger('keyup');
+        //});
+
+        $("#invoicenumber, #MyFirst, #MySecond, #MyThird, #MyFourth, #MyFifth, #Mytotal, #MyTaxes, #MyNet").keydown(function (e) {
+            if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 190]) !== -1 ||
+                (e.keyCode === 65 && (e.ctrlKey === true || e.metaKey === true)) ||
+                (e.keyCode >= 35 && e.keyCode <= 40)) {
+                return;
+            }
+            if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                e.preventDefault();
+            }
+        });
+
+
+    });
+</script>

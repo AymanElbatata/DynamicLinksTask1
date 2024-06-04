@@ -1,0 +1,39 @@
+﻿
+@{
+    ViewBag.Title = "PopUP";
+}
+
+<h2>PopUP</h2>
+
+<input type="button" id="Delete" class="btn btn-primary btn-cons red" value="Delete" />
+
+<div id="dialog-form" title="Create new user">
+    <form>
+        <fieldset>
+            <label for="name">Enter your Comments Here</label>
+            <input type="text" name="name" id="name" value="Jane Smith" class="text ui-widget-content ui-corner-all">
+            <!-- Allow form submission with keyboard without duplicating the dialog button -->
+
+            <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+        </fieldset>
+    </form>
+</div>
+
+
+<script>
+    $('#Delete').click(function () {
+        $('#dialog-form').dialog('open');
+    });
+
+    $(document).ready(function () {
+        jQuery("#dialog-form").dialog({
+            autoOpen: false,
+            modal: true,
+            open: function () {
+                $('.ui-widget-overlay').bind('click', function () {
+                    $('#dialog').dialog('close');
+                })
+            }
+        });
+    });
+</script>

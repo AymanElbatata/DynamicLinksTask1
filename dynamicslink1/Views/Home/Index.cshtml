@@ -1,0 +1,73 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    object[] myobj = { 10, 5, 5 * 10, "aym" };
+    //object[][] myobj2 /*= { { "A", "B" } }*/ = new object[5][];
+    //int[2][3] myobj2  /*= { { "A", "B" } }*/ = { { 1,2,3},{ 2,3,4} };
+    //int start = 10;
+    //for (int i = 0; i < 5; i++)
+    //{
+    //    for (int k = 1; k < 5; k++)
+    //    {
+    //        myobj2[i][k] = start++;
+    //        //start++;
+    //    }
+    //    //start++;
+    //}
+}
+<br />
+<br />
+<br />
+<center>
+    <table class="table-bordered" style="padding:30px" cellpadding="20" cellspacing="20">
+        <tr style="text-align:center">
+            <th>
+                Pure Jquery
+            </th>
+            <th>
+                MVC C# & Jquery
+            </th>
+            <th>Upload IMAGE</th>
+            <th>Pop UP</th>
+        </tr>
+        <tr style="text-align:center">
+            <td>
+                &nbsp;
+                @Html.ActionLink("Jquery", "JqueryPage", "Home")
+                &nbsp;
+            </td>
+            <td>
+                &nbsp;
+                @Html.ActionLink("ActionResult", "Action", "Home")
+                &nbsp;
+            </td>
+            <td>
+                &nbsp;
+                @Html.ActionLink("UploadIMAGE", "UploadIMAGE", "Home")
+                &nbsp;
+            </td>
+            <td>
+                &nbsp;
+                @Html.ActionLink("PopUP", "PopUP", "Home")
+                &nbsp;
+            </td>
+        </tr>
+    </table>
+</center>
+
+<br />
+@for (int i = 0; i < myobj.Length; i++)
+{
+    <p>@myobj[i]</p>
+}
+
+@*@for (int i = 0; i < myobj2.Length; i++)
+{
+    <p>@myobj[i]</p>
+    <ul>
+        @for (int k = 0; k < i; k++)
+        {
+        <li>@myobj2[i][k]</li>
+        }
+    </ul>
+}*@

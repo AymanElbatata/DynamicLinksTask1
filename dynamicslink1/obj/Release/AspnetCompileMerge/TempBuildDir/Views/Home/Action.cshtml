@@ -1,0 +1,197 @@
+﻿@model IEnumerable<dynamicslink1.Models.MyModel>
+@{
+    ViewBag.Title = "Action";
+    int count = 1;
+}
+<br />
+<br />
+<center>
+    <h2>ActionResult</h2>
+    <h3>Technical Task</h3>
+    <p style="color:red">Note: Please be notified that You can't add new row while your manipulation, so add or remove your rows first!.</p>
+</center>
+<br />
+<div style="padding:40px" class="row">
+    <span>Invoice No &nbsp;<input type="number" id="invoicenumber" /></span>
+    <span>&nbsp; &nbsp; &nbsp;</span>
+    <span>invoice Date  &nbsp;<input type="date" id="mydate" /></span>
+    <br />
+    <span>store &nbsp; @Html.DropDownList("GetMyList", null, htmlAttributes: new { })</span>
+</div>
+<div>
+    <table>
+        <tr>
+            <td>
+                <table border="1" id="mytbl">
+                    <tr>
+                        <th>SN</th>
+                        <th style="text-align:center">
+                            Item
+                        </th>
+                        <th style="text-align:center">
+                            Unit
+                        </th>
+                        <th style="text-align:center">
+                            Price
+                        </th>
+                        <th style="text-align:center">
+                            Qty
+                        </th>
+                        <th style="text-align:center">
+                            Total
+                        <th style="text-align:center">
+                            Discount
+                        </th>
+                        <th style="text-align:center">
+                            Net
+                        </th>
+                    </tr>
+                    @foreach (var item in Model)
+                    {
+                        <tr class="myrow">
+                            <td>@(count++) </td>
+                            <td>
+                                @Html.DropDownList("Item", null, htmlAttributes: new { @class= "Item" })
+                            </td>
+                            <td>
+                                @Html.DropDownList("Unit", null, htmlAttributes: new { @class = "Unit" })
+                            </td>
+                            <td>
+                                <input type="number" value=" @item.Price" class="MyFirst" style="text-align:center"/>
+                            </td>
+                            <td>
+                                 <input type="number" value=" @item.Qty" class="MySecond" style="text-align:center"/>
+                            </td>
+                            <td>
+                                 <input type="number" value=" @item.Total" class="MyThird" style="text-align:center"/>
+                            </td>
+                            <td>
+                                 <input type="number" value=" @item.Discount" class="MyFourth" style="text-align:center"/>
+                            </td>
+                            <td>
+                                 <input type="number" value="@item.Net" class="MyFifth" style="text-align:center"/>
+                            </td>
+                        </tr>
+                    }
+
+                </table>
+            </td>
+            <td>&nbsp;</td>
+            <td>
+                @using (Html.BeginForm("Action", "Home", new { countermore = ViewBag.counter }, FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+
+                    <button>Add</button> <span>&nbsp;||&nbsp;</span>
+                }
+            </td>
+            <td>
+                @using (Html.BeginForm("Action", "Home", new { counterless = ViewBag.counter }, FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    <input type="submit" value="Delete" />
+                }
+            </td>
+        </tr>
+    </table>
+</div>
+<div style="padding: 25px; margin: 35px auto; text-align: right; padding-right: 10em">
+    <span> Total <input type="text" id="Mytotal" style="text-align:center"/></span>
+    <br />
+    <span> Taxes <input type="text" id="MyTaxes" style="text-align:center"/></span>
+    <br />
+    <span> Net <input type="text" id="MyNet" style="text-align:center"/></span>
+</div>
+<div style="padding-left:30em" class="row">
+    <span>
+        @*@using (Html.BeginForm("Action", "Home", new { counterall = ViewBag.counter }, FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            <input type="submit" value="Save" />
+        }*@
+        <input type="button" value="Save" id="savebtn"/>
+        <br />
+
+    </span>
+</div>
+
+<script>
+    $(document).ready(function () {
+
+        $('.MyFirst').on('keyup', function () {
+            $(this).parent().next().next().children("input").val($(this).val() * $(this).parent().next().children("input").val());
+            $('#MySecond').trigger('keyup');
+            $('#MyFourth').trigger('keyup');
+
+        });
+
+        $('.MySecond').on('keyup', function () {
+            $(this).parent().next().children("input").val($(this).val() * $(this).parent().prev().children("input").val());
+            $('#MyFourth').trigger('keyup');
+        });
+
+        $('.MyFourth').on('keyup', function () {
+            $(this).parent().next().children("input").val($(this).parent().prev().children("input").val() - $(this).val());
+
+            var arr = document.getElementsByClassName("MyFifth");
+            var total = 0;
+            for (var i = 0; i < arr.length; i++) {
+                total += parseInt(arr[i].value);
+            }
+            document.getElementById("Mytotal").value = total;
+            $('#MyTaxes').trigger('keyup');
+            $('#Mytotal').trigger('keyup');
+        });
+
+
+        $('#MyTaxes').on('keyup', function () {
+            document.getElementById("MyNet").value = document.getElementById("Mytotal").value - document.getElementById("MyTaxes").value;
+        });
+
+        $('#Mytotal').on('keyup', function () {
+            document.getElementById("MyNet").value = document.getElementById("Mytotal").value - document.getElementById("MyTaxes").value;
+            $('#MyTaxes').trigger('keyup');
+
+        });
+
+        $("#savebtn").on("click",function () {
+            var data = [];
+            var arr1 = document.getElementsByClassName("Item");
+            var arr2 = document.getElementsByClassName("Unit");
+            var arr3 = document.getElementsByClassName("MyFirst");
+            var arr4 = document.getElementsByClassName("MySecond");
+            var arr5 = document.getElementsByClassName("MyThird");
+            var arr6 = document.getElementsByClassName("MyFourth");
+            var arr7 = document.getElementsByClassName("MyFifth");
+            for (var i = 0; i < arr1.length; i++) {
+
+                var myobj = {
+                    Item: parseInt(arr1[i].Value),
+                    Unit: parseInt(arr2[i].Value),
+                    Price: parseInt(arr3[i].value),
+                    Qty: parseInt(arr4[i].value),
+                    Total: parseInt(arr5[i].value),
+                    Discount: parseInt(arr6[i].value),
+                    Net: parseInt(arr7[i].value),
+                };
+                data.push(myobj);
+            }
+            //var convertedData = JSON.stringify(data);
+            //console.log(convertedData);
+            //console.log(typeof (convertedData));
+            var url = '@Url.Action("SaveMYData", "Home", new { Area=""}, null)';
+            //$.post(url, convertedData, function (data, statuscode, xhr) {
+            //    console.log(data);
+            //    console.log(statuscode);
+            //    console.log(xhr);
+            //});
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: { data: JSON.stringify(data) }
+            });
+
+        });
+
+        });
+</script>

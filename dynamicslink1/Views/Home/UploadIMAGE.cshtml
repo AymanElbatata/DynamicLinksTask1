@@ -1,0 +1,30 @@
+﻿
+@{
+    ViewBag.Title = "UploadIMAGE";
+}
+
+<h2>UploadIMAGE</h2>
+
+@using (Html.BeginForm("UploadIMAGE", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="col-sm-4">
+        <button type="button" id="mybtn" class="btn" onclick="javascript: document.getElementById('Image1').click();">
+            <img id="uploadimg1" width="150" height="125" class="input-type-file" src="~/Images/main.png">
+        </button>
+        <input type="file" accept="image/*" data-type='image' class="profile_img" name="Image1" id="Image1" style='visibility: hidden;' onchange="document.getElementById('uploadimg1').src = window.URL.createObjectURL(this.files[0])">
+    </div>
+    <br />
+    <input type="submit" id="btn222" value="send image" />
+}
+
+<script>
+ 
+
+    //$(document).ready(function () {
+    //    $("#btn222").click(function (e) {
+    //        e.preventDefault();
+
+    //        });
+    //});
+</script>
